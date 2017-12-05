@@ -5,6 +5,10 @@ lib="lib"
 src="src"
 classes="class"
 
+if [ ! -e ${classes} ]; then
+    mkdir ${classes}
+fi
+
 inputfile=$1
 topicNumber=$2
 iterationNumber=$3
