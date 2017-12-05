@@ -626,8 +626,6 @@ public class SparseTP {
         if(!f.exists()) {
             new File("result").mkdir();
         }
-        System.out.println(inputFilename);
-        System.out.println(inputFilename.split("\\.")[0]);
         String resultFilename="result/"+inputFilename.split("\\.")[0].split("/")[1]
                 +"_K"+topicNumber+"_iteration"+iterationNumber+".txt";
         LogUtil.logger().info("The topics are restored in "+resultFilename+", and the topics are ordered by the " +
