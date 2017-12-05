@@ -157,7 +157,6 @@ public class LDAonPhrases {
 
     public static void main(String[] args) {
         portal("input/mathematics.txt.serialized","input/mathematics.txt.pkl");
-//        portal("input/Argentina.json.serialized");
     }
 
 }

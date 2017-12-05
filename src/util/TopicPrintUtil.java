@@ -148,7 +148,6 @@ public class TopicPrintUtil {
 
 
     /**
-     * TODO
      * @param numEntityToShow
      * @param topicNum
      * @param numTypes
@@ -199,7 +198,6 @@ public class TopicPrintUtil {
 
 
     /**
-     * TODO
      * @param numEntityToShow
      * @param topicNum
      * @param topicSortedWords

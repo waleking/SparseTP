@@ -29,7 +29,6 @@ public class SparseTP {
 
     /**
      * A. word part
-     * add by weijing huang
      */
     //s
     double smoothing_only_sum = 0;
@@ -54,7 +53,6 @@ public class SparseTP {
 
     /**
      * B. phrase part
-     * add by weijing huang
      */
     //s
     double smoothing_only_sum_phrasepart = 0;
@@ -185,7 +183,6 @@ public class SparseTP {
             sampleWordsPart(phrases, topicSequence,ndk);
             samplePhrasesPart(phrases, topicSequence,ndk);
         }
-        //TODO, add the counting function
         LogUtil.logger().info("num of constraints="+ CountingPhraseAssignedAsWords.count(data));
     }
 
@@ -252,7 +249,7 @@ public class SparseTP {
     /**
      * compute the topic distribution for a phrase
      */
-    public void sampleForPhrase(int[] phrase, int[] phraseTopic, int[] ndk) {//TODO
+    public void sampleForPhrase(int[] phrase, int[] phraseTopic, int[] ndk) {
         int type, oldTopic, newTopic;
         int[] currentTypeTopicCounts;
         int[] tokensPerTopic=this.sparseStatisticsOfPhrases.nK_;
@@ -261,7 +258,7 @@ public class SparseTP {
         //set localWordTypeTopicCounts
         for(int i=0;i<phrase.length-1;i++){
             int wordTopic=phraseTopic[i];
-            this.valueTopicOperator.inc(this.localWordTypeTopicCounts,wordTopic);//TODO
+            this.valueTopicOperator.inc(this.localWordTypeTopicCounts,wordTopic);
         }
 
         type = phrase[n];
@@ -306,7 +303,7 @@ public class SparseTP {
             topic_word_sum_phrasepart+=nkv*topic_word_coef_phrasepart[k];
             index++;
         }
-        //(6.addition1), update MRF part, TODO
+        //(6.addition1), update MRF part
         int index_mrf=0;
         mrf_sum_phrasepart=0;
         while(index_mrf<localWordTypeTopicCounts.length && localWordTypeTopicCounts[index_mrf]>0){
@@ -330,7 +327,7 @@ public class SparseTP {
 
         // Figure out which topic contains that point
         newTopic = -1;
-        if(sample<mrf_sum_phrasepart){//TODO
+        if(sample<mrf_sum_phrasepart){
             index_mrf=0;
             while(index_mrf<localWordTypeTopicCounts.length && localWordTypeTopicCounts[index_mrf]>0){
                 int tmpValueTopic=localWordTypeTopicCounts[index_mrf];
@@ -392,8 +389,6 @@ public class SparseTP {
             throw new IllegalStateException ("SparseTP_Minus: New topic not sampled. at "+n);
         }
 
-//        LogUtil.logger().info("phraseTopic="+total_mass);
-
         // Put that new topic into the counts
         phraseTopic[n] = newTopic;
 
@@ -409,8 +404,6 @@ public class SparseTP {
         assert(tokensPerTopic[newTopic] >= 0) : "old Topic " + oldTopic + " below 0";
 
         //(3) update bucket
-//            smoothing_only_bucket[newTopic]=alpha*beta/(betaSum+tokensPerTopic[newTopic]);
-//            document_topic_bucket[newTopic]=localTopicCounts[newTopic]*beta/(betaSum+tokensPerTopic[newTopic]);
         double tmp2=beta/(betaSum+tokensPerTopic[newTopic]);
         smoothing_only_bucket_phrasepart[newTopic]=alpha*tmp2;
         document_topic_bucket_phrasepart[newTopic]=ndk[newTopic]*tmp2;
@@ -423,7 +416,7 @@ public class SparseTP {
         //(5) update coef
         topic_word_coef_phrasepart[newTopic] = (alpha + ndk[newTopic]) / (betaSum + tokensPerTopic[newTopic]);
 
-        //resest localWordTypeTopicCounts, which is used for counting the topic distribution of words in the phrase, TODO
+        //resest localWordTypeTopicCounts, which is used for counting the topic distribution of words in the phrase
         this.valueTopicOperator.resetToZero(this.localWordTypeTopicCounts);
         //reset this.mrf_bucket_phrasepart
         index_mrf=0;
@@ -575,8 +568,6 @@ public class SparseTP {
             assert(tokensPerTopic[newTopic] >= 0) : "old Topic " + oldTopic + " below 0";
 
             //(3) update bucket
-//            smoothing_only_bucket[newTopic]=alpha*beta/(betaSum+tokensPerTopic[newTopic]);
-//            document_topic_bucket[newTopic]=localTopicCounts[newTopic]*beta/(betaSum+tokensPerTopic[newTopic]);
             double tmp2=beta/(betaSum+tokensPerTopic[newTopic]);
             smoothing_only_bucket[newTopic]=alpha*tmp2;
             document_topic_bucket[newTopic]=ndk[newTopic]*tmp2;
