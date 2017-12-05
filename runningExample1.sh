@@ -13,4 +13,8 @@ if [ ! -e input/20newsgroups.txt ]; then
     gzip -d input/20newsgroups.txt.gz
 fi
 
-bash run.sh input/20newsgroups.txt 30 1000 10
+TopicNumber=100
+IterationNumber=1000
+NumberOfTopPhrasesToShow=10
+
+bash run.sh input/20newsgroups.txt ${TopicNumber} ${IterationNumber} ${NumberOfTopPhrasesToShow}

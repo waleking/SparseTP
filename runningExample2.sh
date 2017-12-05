@@ -13,4 +13,8 @@ if [ ! -e input/mathematics.txt ]; then
     gzip -d input/mathematics.txt.gz
 fi
 
-bash run.sh input/mathematics.txt 30 1000 10
+TopicNumber=100
+IterationNumber=1000
+NumberOfTopPhrasesToShow=10
+
+bash run.sh input/mathematics.txt ${TopicNumber} ${IterationNumber} ${NumberOfTopPhrasesToShow} 

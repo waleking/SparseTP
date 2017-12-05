@@ -20,7 +20,9 @@ public class SparseTP {
     private int numTopics;
     private double alpha;
     private double beta;
+    private double betaPhrase;
     protected double betaSum;
+    protected double betaSumForPhrases;
     private int numWordTypes;//size of word vocabulary
     private int numPhraseTypes;//size of phrase vocabulary
     protected Alphabet alphabet;
@@ -29,6 +31,7 @@ public class SparseTP {
 
     /**
      * A. word part
+     * add by weijing huang
      */
     //s
     double smoothing_only_sum = 0;
@@ -53,6 +56,7 @@ public class SparseTP {
 
     /**
      * B. phrase part
+     * add by weijing huang
      */
     //s
     double smoothing_only_sum_phrasepart = 0;
@@ -70,15 +74,16 @@ public class SparseTP {
     protected SparseStatisticsOfWords sparseStatisticsOfWords;//nKV, nK_
     protected SparseStatisticsOfPhrases sparseStatisticsOfPhrases;//nKV, nK_ of phrases
 
-    public SparseTP(int numTopics, double alpha, double beta, Alphabet alphabet) {
-        this(numTopics, alpha, beta, new Randoms());
+    public SparseTP(int numTopics, double alpha, double beta, double betaPhrase, Alphabet alphabet) {
+        this(numTopics, alpha, beta, betaPhrase, new Randoms());
         this.alphabet=alphabet;
     }
 
-    public SparseTP(int numTopics, double alpha, double beta, Randoms random) {
+    public SparseTP(int numTopics, double alpha, double beta, double betaPhrase, Randoms random) {
         this.numTopics = numTopics;
         this.alpha = alpha;
         this.beta = beta;
+        this.betaPhrase=betaPhrase;
 
         this.random = random;
 
@@ -92,6 +97,7 @@ public class SparseTP {
         this.numWordTypes = training.getAlphabet().size();
         this.numPhraseTypes = training.getPhraseAlphabet().size();
         this.betaSum = this.numWordTypes * this.beta;
+        this.betaSumForPhrases=this.numPhraseTypes * this.betaPhrase;
         this.sparseStatisticsOfWords = new SparseStatisticsOfWords(numTopics, numWordTypes,
                 training,this.valueTopicOperator);
         this.sparseStatisticsOfPhrases = new SparseStatisticsOfPhrases(numTopics, numPhraseTypes,
@@ -153,9 +159,9 @@ public class SparseTP {
          */
         smoothing_only_sum_phrasepart=0;
         for(int k=0;k<this.numTopics;k++){
-            smoothing_only_bucket_phrasepart[k]=alpha*beta/(betaSum+this.sparseStatisticsOfPhrases.nK_[k]);
+            smoothing_only_bucket_phrasepart[k]=alpha*betaPhrase/(betaSumForPhrases+this.sparseStatisticsOfPhrases.nK_[k]);
             smoothing_only_sum_phrasepart+=smoothing_only_bucket_phrasepart[k];
-            topic_word_coef_phrasepart[k]=alpha / (this.sparseStatisticsOfPhrases.nK_[k] + betaSum);
+            topic_word_coef_phrasepart[k]=alpha / (this.sparseStatisticsOfPhrases.nK_[k] + betaSumForPhrases);
         }
 
         localWordTypeTopicCounts=new int[numTopics];
@@ -183,7 +189,8 @@ public class SparseTP {
             sampleWordsPart(phrases, topicSequence,ndk);
             samplePhrasesPart(phrases, topicSequence,ndk);
         }
-        LogUtil.logger().info("num of constraints="+ CountingPhraseAssignedAsWords.count(data));
+        //TODO, add the counting function
+        LogUtil.logger().info("num of constraints="+CountingPhraseAssignedAsWords.count(data));
     }
 
     public void sampleWordsPart(int[][] phrases, int[][] topicSequence,int[] ndk) {
@@ -226,9 +233,9 @@ public class SparseTP {
         for(int k=0;k<this.numTopics;k++){
             if(ndk[k] != 0){
                 int n=ndk[k];
-                document_topic_bucket_phrasepart[k] = beta * n / (betaSum + this.sparseStatisticsOfPhrases.nK_[k]);
+                document_topic_bucket_phrasepart[k] = betaPhrase * n / (betaSumForPhrases + this.sparseStatisticsOfPhrases.nK_[k]);
                 document_topic_sum_phrasepart+=document_topic_bucket_phrasepart[k];
-                topic_word_coef_phrasepart[k] = (alpha + n) / (betaSum + this.sparseStatisticsOfPhrases.nK_[k]);
+                topic_word_coef_phrasepart[k] = (alpha + n) / (betaSumForPhrases + this.sparseStatisticsOfPhrases.nK_[k]);
             }
         }
         //update topicSequence
@@ -241,7 +248,7 @@ public class SparseTP {
         //reset topic_word_coef for the next document
         for(int k=0;k<this.numTopics;k++){
             if(ndk[k]!=0){
-                topic_word_coef_phrasepart[k]=alpha/(betaSum+sparseStatisticsOfPhrases.nK_[k]);
+                topic_word_coef_phrasepart[k]=alpha/(betaSumForPhrases+sparseStatisticsOfPhrases.nK_[k]);
             }
         }
     }
@@ -249,7 +256,7 @@ public class SparseTP {
     /**
      * compute the topic distribution for a phrase
      */
-    public void sampleForPhrase(int[] phrase, int[] phraseTopic, int[] ndk) {
+    public void sampleForPhrase(int[] phrase, int[] phraseTopic, int[] ndk) {//TODO
         int type, oldTopic, newTopic;
         int[] currentTypeTopicCounts;
         int[] tokensPerTopic=this.sparseStatisticsOfPhrases.nK_;
@@ -258,7 +265,7 @@ public class SparseTP {
         //set localWordTypeTopicCounts
         for(int i=0;i<phrase.length-1;i++){
             int wordTopic=phraseTopic[i];
-            this.valueTopicOperator.inc(this.localWordTypeTopicCounts,wordTopic);
+            this.valueTopicOperator.inc(this.localWordTypeTopicCounts,wordTopic);//TODO
         }
 
         type = phrase[n];
@@ -281,7 +288,7 @@ public class SparseTP {
         assert(tokensPerTopic[oldTopic] >= 0) : "old Topic " + oldTopic + " below 0";
 
         //(3) update bucket
-        double tmp1=beta/(betaSum+tokensPerTopic[oldTopic]);
+        double tmp1=betaPhrase/(betaSumForPhrases+tokensPerTopic[oldTopic]);
         smoothing_only_bucket_phrasepart[oldTopic]=alpha*tmp1;
         document_topic_bucket_phrasepart[oldTopic]=ndk[oldTopic]*tmp1;
 
@@ -290,7 +297,7 @@ public class SparseTP {
         document_topic_sum_phrasepart+=document_topic_bucket_phrasepart[oldTopic];
 
         //(5) update coef
-        topic_word_coef_phrasepart[oldTopic] = (alpha + ndk[oldTopic]) / (betaSum + tokensPerTopic[oldTopic]);
+        topic_word_coef_phrasepart[oldTopic] = (alpha + ndk[oldTopic]) / (betaSumForPhrases + tokensPerTopic[oldTopic]);
 
         // Now calculate and add up the scores for each topic for this word
         //(6) update topic_word_sum
@@ -303,7 +310,7 @@ public class SparseTP {
             topic_word_sum_phrasepart+=nkv*topic_word_coef_phrasepart[k];
             index++;
         }
-        //(6.addition1), update MRF part
+        //(6.addition1), update MRF part, TODO
         int index_mrf=0;
         mrf_sum_phrasepart=0;
         while(index_mrf<localWordTypeTopicCounts.length && localWordTypeTopicCounts[index_mrf]>0){
@@ -327,7 +334,7 @@ public class SparseTP {
 
         // Figure out which topic contains that point
         newTopic = -1;
-        if(sample<mrf_sum_phrasepart){
+        if(sample<mrf_sum_phrasepart){//TODO
             index_mrf=0;
             while(index_mrf<localWordTypeTopicCounts.length && localWordTypeTopicCounts[index_mrf]>0){
                 int tmpValueTopic=localWordTypeTopicCounts[index_mrf];
@@ -381,6 +388,8 @@ public class SparseTP {
             }
         }
 
+//        LogUtil.logger().info("phraseTopic="+total_mass);
+
 
         assert(newTopic>=0);
 
@@ -388,6 +397,8 @@ public class SparseTP {
         if (newTopic == -1) {
             throw new IllegalStateException ("SparseTP_Minus: New topic not sampled. at "+n);
         }
+
+//        LogUtil.logger().info("phraseTopic="+total_mass);
 
         // Put that new topic into the counts
         phraseTopic[n] = newTopic;
@@ -404,7 +415,7 @@ public class SparseTP {
         assert(tokensPerTopic[newTopic] >= 0) : "old Topic " + oldTopic + " below 0";
 
         //(3) update bucket
-        double tmp2=beta/(betaSum+tokensPerTopic[newTopic]);
+        double tmp2=betaPhrase/(betaSumForPhrases+tokensPerTopic[newTopic]);
         smoothing_only_bucket_phrasepart[newTopic]=alpha*tmp2;
         document_topic_bucket_phrasepart[newTopic]=ndk[newTopic]*tmp2;
 
@@ -414,9 +425,9 @@ public class SparseTP {
         document_topic_sum_phrasepart+=document_topic_bucket_phrasepart[newTopic];
 
         //(5) update coef
-        topic_word_coef_phrasepart[newTopic] = (alpha + ndk[newTopic]) / (betaSum + tokensPerTopic[newTopic]);
+        topic_word_coef_phrasepart[newTopic] = (alpha + ndk[newTopic]) / (betaSumForPhrases + tokensPerTopic[newTopic]);
 
-        //resest localWordTypeTopicCounts, which is used for counting the topic distribution of words in the phrase
+        //resest localWordTypeTopicCounts, which is used for counting the topic distribution of words in the phrase, TODO
         this.valueTopicOperator.resetToZero(this.localWordTypeTopicCounts);
         //reset this.mrf_bucket_phrasepart
         index_mrf=0;
@@ -495,6 +506,10 @@ public class SparseTP {
                 mrf_sum=0;
                 total_mass=smoothing_only_sum+document_topic_sum+topic_word_sum;//no mrf_sum
             }
+//            if(ifContainPhrase==true){
+//                LogUtil.logger().info("phraseTopic="+total_mass);
+//            }
+
 
             // Choose a random point between 0 and the sum of all topic scores
             double sample = random.nextUniform() * total_mass;
@@ -592,8 +607,9 @@ public class SparseTP {
         int numTopics = topicNumber;
         double alpha = 0.1;
         double beta = 0.01;
+        double betaPhrase=0.03;
 
-        SparseTP sparseTP_ = new SparseTP(numTopics, alpha, beta, training.getAlphabet());
+        SparseTP sparseTP_ = new SparseTP(numTopics, alpha, beta, betaPhrase, training.getAlphabet());
         sparseTP_.addInstances(training);
         System.out.println(clock.tick("initialization model"));
 
