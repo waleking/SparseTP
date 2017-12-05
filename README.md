@@ -9,6 +9,12 @@ This work is published in ICTAI 2017. If you are using this tool, please cite ou
 ```
 bash runningExample1.sh
 ```
+
+2.The running example on the Wikipedia articles under the [Mathematics category](https://en.wikipedia.org/wiki/Category:Mathematics).
+```
+bash runningExample2.sh
+```
+
 |  | Top 10 phrases in the topic, the number in the bracket shows the times it appears in the corpus|
 |---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | topic 0 | graph theory(743.0),undirected graph(299.0),directed graph(279.0),planar graph(262.0),complete graph(251.0),planar graphs(249.0),chromatic number(200.0),bipartite graph(153.0),independent set(143.0),hamiltonian cycle(127.0)                                                               |
@@ -22,11 +28,6 @@ bash runningExample1.sh
 | topic 8 | topological space(211.0),vector field(158.0),algebraic topology(122.0),simply connected(121.0),banach space(118.0),euclidean space(118.0),algebraic geometry(117.0),riemannian manifold(113.0),open set(109.0),metric space(108.0)                                                            |
 | topic 9 | complex numbers(189.0),real numbers(151.0),power series(144.0),complex plane(139.0),trigonometric functions(109.0),complex number(104.0),taylor series(96.0),rational functions(95.0),special case(94.0),rational function(91.0)                                                              |
 | ... (to topic 99) | ...|
-
-2.The running example on the Wikipedia articles under the [Mathematics category](https://en.wikipedia.org/wiki/Category:Mathematics).
-```
-bash runningExample2.sh
-```
 
 ## Usage
 It has been tested on MacOS 10.13 (High Sierra), and Debian GNU/Linux 8。
