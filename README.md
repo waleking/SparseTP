@@ -10,6 +10,12 @@ This work is published in ICTAI 2017. If you are using this tool, please cite ou
 bash runningExample1.sh
 ```
 
+| 0 | graph theory, undirected graph, directed graph, planar graph, complete graph, planar graphs ,chromatic number, bipartite graph, independent set, hamiltonian cycle |
+|---|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|   |                                                                                                                                                                    |
+|   |                                                                                                                                                                    |
+|   |                                                                                                                                                                    |
+
 2.The running example on the Wikipedia articles under the [Mathematics category](https://en.wikipedia.org/wiki/Category:Mathematics).
 ```
 bash runningExample2.sh
