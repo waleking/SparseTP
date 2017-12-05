@@ -9,9 +9,9 @@ This work is published in ICTAI 2017. If you are using this tool, please cite ou
 ```
 bash runningExample1.sh
 ```
-
-| topic 0 | graph theory(743.0),undirected graph(299.0),directed graph(279.0),planar graph(262.0),complete graph(251.0),planar graphs(249.0),chromatic number(200.0),bipartite graph(153.0),independent set(143.0),hamiltonian cycle(127.0)                                                               |
+| Reordered topics | Top 10 phrases in the topic, the number in the bracket shows the times it appears in the corpus|
 |---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| topic 0 | graph theory(743.0),undirected graph(299.0),directed graph(279.0),planar graph(262.0),complete graph(251.0),planar graphs(249.0),chromatic number(200.0),bipartite graph(153.0),independent set(143.0),hamiltonian cycle(127.0)                                                               |
 | topic 1 | harvard university(262.0),princeton university(240.0),stanford university(201.0),royal society(200.0),national academy(191.0),american mathematician(190.0),electrical engineering(169.0),united states(157.0),applied mathematics(156.0),american mathematical society(153.0)                |
 | topic 2 | general relativity(1083.0),special relativity(697.0),gravitational field(254.0),reference frame(204.0),lorentz transformation(176.0),time dilation(167.0),inertial frame(156.0),equivalence principle(137.0),lorentz transformations(135.0),metric tensor(134.0)                              |
 | topic 3 | quantum mechanics(1136.0),quantum field theory(360.0),quantum information(268.0),wave function(256.0),quantum theory(236.0),hilbert space(177.0),quantum mechanical(173.0),quantum state(162.0),particle physics(160.0),quantum computing(137.0)                                              |
@@ -21,6 +21,7 @@ bash runningExample1.sh
 | topic 7 | special case(458.0),vice versa(375.0),closely related(210.0),starting point(155.0),general case(135.0),sufficient condition(112.0),special cases(108.0),previous section(103.0),makes sense(103.0),large number(91.0)                                                                         |
 | topic 8 | topological space(211.0),vector field(158.0),algebraic topology(122.0),simply connected(121.0),banach space(118.0),euclidean space(118.0),algebraic geometry(117.0),riemannian manifold(113.0),open set(109.0),metric space(108.0)                                                            |
 | topic 9 | complex numbers(189.0),real numbers(151.0),power series(144.0),complex plane(139.0),trigonometric functions(109.0),complex number(104.0),taylor series(96.0),rational functions(95.0),special case(94.0),rational function(91.0)                                                              |
+| ...(to topic 99) | ...|
 
 2.The running example on the Wikipedia articles under the [Mathematics category](https://en.wikipedia.org/wiki/Category:Mathematics).
 ```
