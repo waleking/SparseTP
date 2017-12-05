@@ -14,7 +14,7 @@ bash runningExample1.sh
 ```
 bash runningExample2.sh
 ```
-
+After running, the resulting topics are listed in result/mathematics_K100_iteration1000.txt 
 |  | Top 10 phrases in the topic, the number in the bracket shows the times it appears in the corpus|
 |---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | topic 0 | graph theory(743.0),undirected graph(299.0),directed graph(279.0),planar graph(262.0),complete graph(251.0),planar graphs(249.0),chromatic number(200.0),bipartite graph(153.0),independent set(143.0),hamiltonian cycle(127.0)                                                               |
@@ -30,7 +30,7 @@ bash runningExample2.sh
 | ... (to topic 99) | ...|
 
 ## Usage
-It has been tested on MacOS 10.13 (High Sierra), and Debian GNU/Linux 8。
+It has been tested on MacOS 10.13 (High Sierra), and Debian GNU/Linux 8.
 There are three steps to get the phrase topics on a given corpus.
   
 1.Get data prepared.
