@@ -13,7 +13,6 @@ import static java.lang.Math.exp;
 /**
  * Created by huangwaleking on 6/24/17.
  */
-@SuppressWarnings("Duplicates")
 public class SparseTP {
     protected ArrayList<TopicAssignment> data;//include instance and topic assignments
 
@@ -189,7 +188,6 @@ public class SparseTP {
             sampleWordsPart(phrases, topicSequence,ndk);
             samplePhrasesPart(phrases, topicSequence,ndk);
         }
-        //TODO, add the counting function
         LogUtil.logger().info("num of constraints="+CountingPhraseAssignedAsWords.count(data));
     }
 
@@ -256,7 +254,7 @@ public class SparseTP {
     /**
      * compute the topic distribution for a phrase
      */
-    public void sampleForPhrase(int[] phrase, int[] phraseTopic, int[] ndk) {//TODO
+    public void sampleForPhrase(int[] phrase, int[] phraseTopic, int[] ndk) {
         int type, oldTopic, newTopic;
         int[] currentTypeTopicCounts;
         int[] tokensPerTopic=this.sparseStatisticsOfPhrases.nK_;
@@ -265,7 +263,7 @@ public class SparseTP {
         //set localWordTypeTopicCounts
         for(int i=0;i<phrase.length-1;i++){
             int wordTopic=phraseTopic[i];
-            this.valueTopicOperator.inc(this.localWordTypeTopicCounts,wordTopic);//TODO
+            this.valueTopicOperator.inc(this.localWordTypeTopicCounts,wordTopic);
         }
 
         type = phrase[n];
@@ -310,7 +308,7 @@ public class SparseTP {
             topic_word_sum_phrasepart+=nkv*topic_word_coef_phrasepart[k];
             index++;
         }
-        //(6.addition1), update MRF part, TODO
+        //(6.addition1), update MRF part
         int index_mrf=0;
         mrf_sum_phrasepart=0;
         while(index_mrf<localWordTypeTopicCounts.length && localWordTypeTopicCounts[index_mrf]>0){
@@ -334,7 +332,7 @@ public class SparseTP {
 
         // Figure out which topic contains that point
         newTopic = -1;
-        if(sample<mrf_sum_phrasepart){//TODO
+        if(sample<mrf_sum_phrasepart){
             index_mrf=0;
             while(index_mrf<localWordTypeTopicCounts.length && localWordTypeTopicCounts[index_mrf]>0){
                 int tmpValueTopic=localWordTypeTopicCounts[index_mrf];
@@ -388,17 +386,12 @@ public class SparseTP {
             }
         }
 
-//        LogUtil.logger().info("phraseTopic="+total_mass);
-
-
         assert(newTopic>=0);
 
         // Make sure we actually sampled a topic
         if (newTopic == -1) {
             throw new IllegalStateException ("SparseTP_Minus: New topic not sampled. at "+n);
         }
-
-//        LogUtil.logger().info("phraseTopic="+total_mass);
 
         // Put that new topic into the counts
         phraseTopic[n] = newTopic;
@@ -427,7 +420,7 @@ public class SparseTP {
         //(5) update coef
         topic_word_coef_phrasepart[newTopic] = (alpha + ndk[newTopic]) / (betaSumForPhrases + tokensPerTopic[newTopic]);
 
-        //resest localWordTypeTopicCounts, which is used for counting the topic distribution of words in the phrase, TODO
+        //resest localWordTypeTopicCounts, which is used for counting the topic distribution of words in the phrase
         this.valueTopicOperator.resetToZero(this.localWordTypeTopicCounts);
         //reset this.mrf_bucket_phrasepart
         index_mrf=0;
@@ -506,9 +499,6 @@ public class SparseTP {
                 mrf_sum=0;
                 total_mass=smoothing_only_sum+document_topic_sum+topic_word_sum;//no mrf_sum
             }
-//            if(ifContainPhrase==true){
-//                LogUtil.logger().info("phraseTopic="+total_mass);
-//            }
 
 
             // Choose a random point between 0 and the sum of all topic scores
@@ -638,8 +628,11 @@ public class SparseTP {
         }
         System.out.println(inputFilename);
         System.out.println(inputFilename.split("\\.")[0]);
-        MyFile resultWriter=new MyFile("result/"+inputFilename.split("\\.")[0].split("/")[1]
-                +"_K"+topicNumber+"_iteration"+iterationNumber+".txt","w");
+        String resultFilename="result/"+inputFilename.split("\\.")[0].split("/")[1]
+                +"_K"+topicNumber+"_iteration"+iterationNumber+".txt";
+        LogUtil.logger().info("The topics are restored in "+resultFilename+", and the topics are ordered by the " +
+                "number of topical phrases in descending order");
+        MyFile resultWriter=new MyFile(resultFilename,"w");
         resultWriter.print(sortedTopics);
         resultWriter.close();
     }

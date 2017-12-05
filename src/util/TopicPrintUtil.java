@@ -61,26 +61,6 @@ public class TopicPrintUtil {
         return topicSortedWords;
     }
 
-    public static ArrayList<TreeSet<IDSorter>> getSortedWords (int numTopics, int numTypes,
-                                                               double[][] itemsKV) {
-
-        ArrayList<TreeSet<IDSorter>> topicSortedWords = new ArrayList<TreeSet<IDSorter>>(numTopics);
-
-        // Initialize the tree sets
-        for (int topic = 0; topic < numTopics; topic++) {
-            topicSortedWords.add(new TreeSet<IDSorter>());
-        }
-
-        // Collect gamma
-        for(int topic=0;topic<numTopics;topic++){
-            TreeSet<IDSorter> sortedWords=topicSortedWords.get(topic);
-            for(int v=0;v<numTypes;v++){
-                sortedWords.add(new IDSorter(v,itemsKV[topic][v]));
-            }
-        }
-        return topicSortedWords;
-    }
-
     /**
      * sort itemsKV according to value
      * @param numTopics
@@ -113,24 +93,11 @@ public class TopicPrintUtil {
         return topicSortedWords;
     }
 
-    public static String showTopics(int numEntityToShow, int topicNum, int numTypes,
-                                    double[][] itemsKV, Alphabet alphabet,boolean showDigitNum){
-        ArrayList<TreeSet<IDSorter>> topicSortedWords=getSortedWords(topicNum, numTypes, itemsKV);
-        ArrayList<ArrayList<String>> topics=topicsPhraes(numEntityToShow,topicNum,topicSortedWords,alphabet);
-//        return "pmi="+pmiComputer.pmi(topics)+"\n"+
-//                showTopics(numEntityToShow,topicNum,topicSortedWords,alphabet,showDigitNum);
-        return showTopics(numEntityToShow,topicNum,topicSortedWords,alphabet,showDigitNum);
-    }
-
 
     public static String showTopics(int numEntityToShow, int topicNum, int numTypes,
                                     int[][] itemsKV, Alphabet alphabet,boolean showDigitNum){
         ArrayList<TreeSet<IDSorter>> topicSortedWords=getSortedWords(topicNum, numTypes, itemsKV);
         ArrayList<ArrayList<String>> topics=topicsPhraes(numEntityToShow,topicNum,topicSortedWords,alphabet);
-        double pmiscore=pmiComputer.pmi(topics);
-//        LogUtil.logger().info("pmi="+pmiscore);
-//        return "pmi="+pmiscore+"\n"+
-//                showTopics(numEntityToShow,topicNum,topicSortedWords,alphabet,showDigitNum);
         return showTopics(numEntityToShow,topicNum,topicSortedWords,alphabet,showDigitNum);
     }
 
@@ -140,9 +107,6 @@ public class TopicPrintUtil {
         ArrayList<TreeSet<IDSorter>> topicSortedWords=getSortedWords(topicNum, numTypes, itemsKV,valueTopicOperator);
         ArrayList<ArrayList<String>> topics=topicsPhraes(numEntityToShow,topicNum,topicSortedWords,alphabet);
         double pmiscore=pmiComputer.pmi(topics);
-//        LogUtil.logger().info("sparsetp pmi="+pmiscore);
-//        return "pmi="+pmiscore+"\n"+
-//                showTopics(numEntityToShow,topicNum,topicSortedWords,alphabet,showDigitNum);
         return showTopics(numEntityToShow,topicNum,topicSortedWords,alphabet,showDigitNum);
     }
 
@@ -164,36 +128,7 @@ public class TopicPrintUtil {
                                           int[] topicsSize){
         ArrayList<TreeSet<IDSorter>> topicSortedWords=getSortedWords(topicNum, numTypes, itemsKV,valueTopicOperator);
         ArrayList<ArrayList<String>> topics=topicsPhraes(numEntityToShow,topicNum,topicSortedWords,alphabet);
-        double pmiscore=pmiComputer.pmi(topics);
-//        LogUtil.logger().info("sparsetp pmi="+pmiscore);
-//        return "pmi="+pmiscore+"\n"+
-//                showTopics(numEntityToShow,topicNum,topicSortedWords,alphabet,showDigitNum);
         return showSortedTopics(numEntityToShow,topicNum,topicSortedWords,alphabet,showDigitNum,oldToNew,topicsSize,topics);
-    }
-
-    /**
-     * different from its variation version that only contains 1 topic.
-     * @param numEntityToShow
-     * @param numTypes
-     * @param itemsV
-     * @param alphabet
-     * @return
-     */
-    public static String showSingleTopic(int numEntityToShow, int numTypes,
-                                    int[] itemsV, Alphabet alphabet){
-        StringBuilder out = new StringBuilder();
-
-        TreeSet<IDSorter> sortedWords=getSortedWords(numTypes, itemsV);
-        Iterator<IDSorter> iterator = sortedWords.iterator();
-        int i=0;
-        out.append ("topic"  + ":\t");
-        while (iterator.hasNext() && i < numEntityToShow) {
-            IDSorter info = iterator.next();
-            out.append(alphabet.lookupObject(info.getID()) + "(" + info.getWeight() + "),");
-            i++;
-        }
-        out.append ("\n");
-        return out.toString();
     }
 
 
@@ -221,8 +156,7 @@ public class TopicPrintUtil {
             int i=0;
             StringBuilder out = new StringBuilder();
             out.append ("topic" + Integer.toString(topic) + ":\t"
-                    +"(#phrases="+topicsSize[topic]+"\tpmi=" +pmiComputer.pmiOfSingleTopic(topics.get(topic))
-                    +"\tnpmi="+pmiComputer.npmiOfSingleTopic(topics.get(topic))+")\t");
+                    +"(#phrases="+topicsSize[topic]+")\t");
             while (iterator.hasNext() && i < numEntityToShow) {
                 IDSorter info = iterator.next();
                 if(showDigitNum==true){
