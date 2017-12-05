@@ -1,5 +1,8 @@
 *.log
-class/.*\.class
+class/*.class
+class/datastructure/
+class/topicmodel/
+class/util/
 .idea/
 input/
-result/.*\.txt
+result/*.txt
