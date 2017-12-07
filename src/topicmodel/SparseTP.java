@@ -26,7 +26,7 @@ public class SparseTP {
     private int numPhraseTypes;//size of phrase vocabulary
     protected Alphabet alphabet;
 
-    private double lambda=0.1;
+    private double lambda=0.01;
 
     /**
      * A. word part
