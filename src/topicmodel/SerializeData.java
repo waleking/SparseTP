@@ -8,12 +8,30 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Created by huangwaleking on 5/4/17.
  */
 public class SerializeData {
+    /**
+     * filter out very frequent phrases (e.g., united states, new york, los angeles, bueno aires)
+     */
+    public static HashSet<String> loadStopPhrases(){
+        HashSet<String> setStopPhrases=new HashSet<String>();
+        MyFile reader=new MyFile("input/stopPhrases.txt","r");
+        ArrayList<String> lines=reader.readAll();
+        for(String line: lines){
+            if(!line.equals("")){
+                setStopPhrases.add(line.trim());
+            }
+        }
+        return setStopPhrases;
+    }
+
     public static void serialize(String inputFilename, String outputFilename, String fileType){
+        HashSet<String> setStopPhrases=loadStopPhrases();
+
         MyFile reader=new MyFile(""+inputFilename,"r");
         ArrayList<String> lines=reader.readAll();
 
@@ -27,13 +45,13 @@ public class SerializeData {
             if(fileType=="json"){
                 try{
                     JSONObject instanceJson=new JSONObject(line);
-                    Instance instance=new Instance(instanceJson,alphabet,phraseAlphabet,"isJson");
+                    Instance instance=new Instance(instanceJson,alphabet,phraseAlphabet,"isJson",setStopPhrases);
                     instances.add(instance);
                 }catch(Exception e){
                     e.printStackTrace();
                 }
             }else{
-                Instance instance=new Instance(line,alphabet,phraseAlphabet);
+                Instance instance=new Instance(line,alphabet,phraseAlphabet,setStopPhrases);
                 instances.add(instance);
             }
             if(i%100==0){
@@ -61,15 +79,7 @@ public class SerializeData {
             String inputFileName=args[0];// input/20newsgroups.txt
             String serializedFile=inputFileName+".serialized";
             SerializeData.serialize(inputFileName,
-                    serializedFile,"txt");
+            serializedFile,"txt");
         }
-
-//        SerializeData.serialize("/Users/huangwaleking/git/topicxonomy/data_Argentina/Argentina_final.json",
-//                "input/Argentina.json.serialized","json");
-
-//        SerializeData.serialize("/Users/huangwaleking/git/topicxonomy/data_mathematics/mathematics_final.json",
-//                "input/mathematics.json.serialized","json");
-//        SerializeData.serialize("/Users/huangwaleking/git/topicxonomy/data_Chemistry/Chemistry_final.json",
-//                "input/Chemistry.json.serialized","json");
     }
 }
