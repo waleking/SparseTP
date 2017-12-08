@@ -19,7 +19,7 @@ public class SerializeData {
      */
     public static HashSet<String> loadStopPhrases(){
         HashSet<String> setStopPhrases=new HashSet<String>();
-        MyFile reader=new MyFile("input/stopPhrases.txt","r");
+        MyFile reader=new MyFile("data/stopPhrases.txt","r");
         ArrayList<String> lines=reader.readAll();
         for(String line: lines){
             if(!line.equals("")){
