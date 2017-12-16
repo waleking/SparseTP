@@ -50,7 +50,7 @@ bash runningExample4.sh
 It has been tested on MacOS 10.13 (High Sierra), and Debian GNU/Linux 8.
 There are three steps to get the phrase topics on a given corpus.
   
-1.****Get data prepared.**
+1.**Get data prepared.**
 
 The fomrat of the input file is `word_1,word_2,word_3,...,word_n,phrases_1,...,phrases_m\n`, and each line representing a single document in a corpus. 
 
@@ -60,7 +60,7 @@ After cloning waleking/AutoPhrase, it's very easy to get the required input file
 
 After running AutoPhrase, the prepared data can be found in `$AutoPhrase_folder/results/input_forTopicModel.txt`.
 
-2.**Run the tool. **
+2.**Run the tool.**
 
 ```      
 bash run.sh ${inputfile} ${TopicNumber} ${IterationNumber} ${NumberOfTopPhrasesToShow}
