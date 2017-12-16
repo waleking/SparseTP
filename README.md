@@ -11,13 +11,13 @@ This work is going to be published in ICTAI 2017. If you are using this tool, pl
 bash runningExample1.sh
 ```
 
-For a quick view withour running, the learned topics can be found in [this link](https://github.com/waleking/SparseTP/blob/master/runningExample_results/20newsgroups_K100_iteration1000.txt). 
+For a quick view without running, the learned topics can be found in [runningExample_results/20newsgroups_K100_iteration1000.txt](https://github.com/waleking/SparseTP/blob/master/runningExample_results/20newsgroups_K100_iteration1000.txt). 
 
 2.The running example on the Wikipedia articles under the [Mathematics category](https://en.wikipedia.org/wiki/Category:Mathematics).
 ```
 bash runningExample2.sh
 ```
-After running, the resulting topics are listed in result/mathematics_K100_iteration1000.txt. Or for quick view, the learned topics can be found in [this link](https://github.com/waleking/SparseTP/blob/master/runningExample_results/mathematics_K100_iteration1000.txt). 
+After running, the resulting topics are listed in result/mathematics_K100_iteration1000.txt. Or for quick view, the learned topics can be found in [runningExample_results/mathematics_K100_iteration1000.txt](https://github.com/waleking/SparseTP/blob/master/runningExample_results/mathematics_K100_iteration1000.txt). 
  
 |  | Top 10 phrases in the topic, the number in the bracket shows the times it appears in the corpus|
 |---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -33,11 +33,24 @@ After running, the resulting topics are listed in result/mathematics_K100_iterat
 | topic 9 | complex numbers(189.0),real numbers(151.0),power series(144.0),complex plane(139.0),trigonometric functions(109.0),complex number(104.0),taylor series(96.0),rational functions(95.0),special case(94.0),rational function(91.0)                                                              |
 | ... (to topic 99) | ...|
 
+3.The running example on the Wikipedia articles under the [Chemistry category](https://en.wikipedia.org/wiki/Category:Chemistry).
+
+```
+bash runningExample3.sh
+```
+
+4.The running example on the Wikipedia articles under the [Argentina category](https://en.wikipedia.org/wiki/Category:Argentina).
+
+```
+bash runningExample4.sh
+```
+
+
 ## Usage
 It has been tested on MacOS 10.13 (High Sierra), and Debian GNU/Linux 8.
 There are three steps to get the phrase topics on a given corpus.
   
-1.Get data prepared.
+1.****Get data prepared.**
 
 The fomrat of the input file is `word_1,word_2,word_3,...,word_n,phrases_1,...,phrases_m\n`, and each line representing a single document in a corpus. 
 
@@ -47,7 +60,7 @@ After cloning waleking/AutoPhrase, it's very easy to get the required input file
 
 After running AutoPhrase, the prepared data can be found in `$AutoPhrase_folder/results/input_forTopicModel.txt`.
 
-2.Run the tool. 
+2.**Run the tool. **
 
 ```      
 bash run.sh ${inputfile} ${TopicNumber} ${IterationNumber} ${NumberOfTopPhrasesToShow}
@@ -57,7 +70,7 @@ bash run.sh ${inputfile} ${TopicNumber} ${IterationNumber} ${NumberOfTopPhrasesT
 * `${TopicNumber}` is the number of topics, e.g., 100; `${IterationNumber}` is the iteration number, e.g., 1000; 
 * `${NumberOfTopPhrasesToShow}` is the number of phraes in each topic to show in the `result/` folder, e.g., 10.
 
-3.Check the result.
+3.**Check the result.**
 
 Visit the `result/` folder, and get the final output in the file `result/inputfile_K${TopicNumber}_iteration${IterationNumber}.txt`
 
