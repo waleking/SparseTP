@@ -595,7 +595,7 @@ public class SparseTP {
         System.out.println(clock.tick("loading data"));
 
         int numTopics = topicNumber;
-        double alpha = 0.1;
+        double alpha = 0.2;
         double beta = 0.01;
         double betaPhrase=0.05;
 
