@@ -1,7 +1,8 @@
 # SparseTP: Efficient Topic Modeling on Phrases via Sparsity
 
 ## Publication
-This work is published in ICTAI 2017. If you are using this tool, please cite our paper:  
+This work is going to be published in ICTAI 2017. If you are using this tool, please cite our paper, thank you!  
+
 *  Efficient Topic Modeling on Phrases via Sparsity, Weijing Huang, Wei Chen, Tengjiao Wang and Shibo Tao, Proceedings of the 29th IEEE International Conference on Tools with Artifical Intelligence (ICTAI'17), Boston, USA, Nov 2017. ([slides](https://github.com/waleking/SparseTP/blob/master/ICTAI_presentation.pdf))
 
 ## Running Examples
@@ -10,11 +11,13 @@ This work is published in ICTAI 2017. If you are using this tool, please cite ou
 bash runningExample1.sh
 ```
 
+For a quick view withour running, the learned topics can be found in [this link](https://github.com/waleking/SparseTP/blob/master/runningExample_results/20newsgroups_K100_iteration1000.txt). 
+
 2.The running example on the Wikipedia articles under the [Mathematics category](https://en.wikipedia.org/wiki/Category:Mathematics).
 ```
 bash runningExample2.sh
 ```
-After running, the resulting topics are listed in result/mathematics_K100_iteration1000.txt
+After running, the resulting topics are listed in result/mathematics_K100_iteration1000.txt. Or for quick view, the learned topics can be found in [this link](https://github.com/waleking/SparseTP/blob/master/runningExample_results/mathematics_K100_iteration1000.txt). 
  
 |  | Top 10 phrases in the topic, the number in the bracket shows the times it appears in the corpus|
 |---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -35,16 +38,26 @@ It has been tested on MacOS 10.13 (High Sierra), and Debian GNU/Linux 8.
 There are three steps to get the phrase topics on a given corpus.
   
 1.Get data prepared.
-`TODO`
+
+The fomrat of the input file is `word_1,word_2,word_3,...,word_n,phrases_1,...,phrases_m\n`, and each line representing a single document in a corpus. 
+
+To get the required input file, we recommend to use the tool [waleking/AutoPhrase](https://github.com/waleking/AutoPhrase) (a fork from [shangjingbo1226/AutoPhrase](https://github.com/shangjingbo1226/AutoPhrase), desinged for the task as topic modeling on phrases) to extract words and phrases from the raw file.
+
+After cloning waleking/AutoPhrase, it's very easy to get the required input file by only running `bash runAutoPhrase.sh $raw_file_path_and_name`, where `$raw_file_path_and_name` is a string of the whole path and name of the raw file, e.g., data/raw/20newsgroups.txt. More information and running examples can be found in the [README of the tool waleking/AutoPhrase](https://github.com/waleking/AutoPhrase/blob/master/README.md).
+
+After running AutoPhrase, the prepared data can be found in `$AutoPhrase_folder/results/input_forTopicModel.txt`.
 
 2.Run the tool. 
 
-Directly use the following command. `${inputfile}` is the file got in the step 1, e.g., input/20newsgroups.txt; `${TopicNumber}` is the number of topics, e.g., 100; `${IterationNumber}` is the iteration number, e.g., 1000; `${NumberOfTopPhrasesToShow}` is the number of phraes in each topic to show in result/ folder, e.g., 10.
 ```      
 bash run.sh ${inputfile} ${TopicNumber} ${IterationNumber} ${NumberOfTopPhrasesToShow}
 ```
 
+* `${inputfile}` is the file got in the step 1, e.g., input/20newsgroups.txt; 
+* `${TopicNumber}` is the number of topics, e.g., 100; `${IterationNumber}` is the iteration number, e.g., 1000; 
+* `${NumberOfTopPhrasesToShow}` is the number of phraes in each topic to show in the `result/` folder, e.g., 10.
+
 3.Check the result.
 
-Visit `result/` folder, and get the final output in result/inputfile_K${TopicNumber}_iteration${IterationNumber}.txt
+Visit the `result/` folder, and get the final output in the file `result/inputfile_K${TopicNumber}_iteration${IterationNumber}.txt`
 
