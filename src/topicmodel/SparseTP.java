@@ -188,7 +188,7 @@ public class SparseTP {
             sampleWordsPart(phrases, topicSequence,ndk);
             samplePhrasesPart(phrases, topicSequence,ndk);
         }
-        LogUtil.logger().info("num of constraints="+CountingPhraseAssignedAsWords.count(data));
+//        LogUtil.logger().info("num of constraints="+CountingPhraseAssignedAsWords.count(data));
     }
 
     public void sampleWordsPart(int[][] phrases, int[][] topicSequence,int[] ndk) {
