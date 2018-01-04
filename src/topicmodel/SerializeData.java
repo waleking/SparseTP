@@ -4,9 +4,7 @@ import datastructure.*;
 import org.json.JSONObject;
 import util.MyFile;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -33,31 +31,40 @@ public class SerializeData {
         HashSet<String> setStopPhrases=loadStopPhrases();
 
         MyFile reader=new MyFile(""+inputFilename,"r");
-        ArrayList<String> lines=reader.readAll();
 
         Alphabet alphabet=new Alphabet();
         PhraseAlphabet phraseAlphabet=new PhraseAlphabet();
         DocAlphabet docAlphabet=new DocAlphabet();
         InstanceList instances=new InstanceList(alphabet,docAlphabet,phraseAlphabet);
 
-        for(int i=0;i<lines.size();i++){
-            String line=lines.get(i).trim();
-            if(fileType=="json"){
-                try{
-                    JSONObject instanceJson=new JSONObject(line);
-                    Instance instance=new Instance(instanceJson,alphabet,phraseAlphabet,"isJson",setStopPhrases);
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(""+inputFilename));
+            String line;
+            int i=0;
+            while ((line = br.readLine()) != null) {
+                line=line.trim();
+                if(fileType=="json"){
+                    try{
+                        JSONObject instanceJson=new JSONObject(line);
+                        Instance instance=new Instance(instanceJson,alphabet,phraseAlphabet,"isJson",setStopPhrases);
+                        instances.add(instance);
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }else{
+                    Instance instance=new Instance(line,alphabet,phraseAlphabet,setStopPhrases);
                     instances.add(instance);
-                }catch(Exception e){
-                    e.printStackTrace();
                 }
-            }else{
-                Instance instance=new Instance(line,alphabet,phraseAlphabet,setStopPhrases);
-                instances.add(instance);
+                if(i%100==0){
+                    System.out.println("processed "+i+" lines");
+                }
+                i=i+1;
             }
-            if(i%100==0){
-                System.out.println("processed "+i+" lines");
-            }
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
         System.out.println("Alphabet's size="+alphabet.size());
         System.out.println("Phrase Alphabets's size="+phraseAlphabet.size());
         System.out.println("Instance number="+instances.size());
