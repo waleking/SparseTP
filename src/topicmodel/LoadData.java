@@ -11,7 +11,7 @@ import java.util.HashSet;
 /**
  * Created by huangwaleking on 5/4/17.
  */
-public class SerializeData {
+public class LoadData {
     /**
      * filter out very frequent phrases (e.g., united states, new york, los angeles, bueno aires)
      */
@@ -27,10 +27,8 @@ public class SerializeData {
         return setStopPhrases;
     }
 
-    public static void serialize(String inputFilename, String outputFilename, String fileType){
+    public static InstanceList load(String inputFilename, String fileType){
         HashSet<String> setStopPhrases=loadStopPhrases();
-
-        MyFile reader=new MyFile(""+inputFilename,"r");
 
         Alphabet alphabet=new Alphabet();
         PhraseAlphabet phraseAlphabet=new PhraseAlphabet();
@@ -42,7 +40,6 @@ public class SerializeData {
             String line;
             int i=0;
             while ((line = br.readLine()) != null) {
-                line=line.trim();
                 if(fileType=="json"){
                     try{
                         JSONObject instanceJson=new JSONObject(line);
@@ -56,7 +53,7 @@ public class SerializeData {
                     instances.add(instance);
                 }
                 if(i%100==0){
-                    System.out.println("processed "+i+" lines");
+                    System.out.println("loaded "+i+" lines");
                 }
                 i=i+1;
             }
@@ -68,25 +65,16 @@ public class SerializeData {
         System.out.println("Alphabet's size="+alphabet.size());
         System.out.println("Phrase Alphabets's size="+phraseAlphabet.size());
         System.out.println("Instance number="+instances.size());
-        ObjectOutputStream oos;
-        try {
-            oos = new ObjectOutputStream(new FileOutputStream(outputFilename));
-            oos.writeObject(instances);
-            oos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return instances;
     }
 
     public static void main(String[] args){
         if(args.length<1){
             System.out.println("need 1 parameter: inputFileName");
-            System.out.println("e.g., input/20newsgroups.txt, it will generate the serialized data file input/20newsgroups.txt.serialized");
+            System.out.println("e.g., input/20newsgroups.txt, it will load the  data file input/20newsgroups.txt");
         }else{
             String inputFileName=args[0];// input/20newsgroups.txt
-            String serializedFile=inputFileName+".serialized";
-            SerializeData.serialize(inputFileName,
-            serializedFile,"txt");
+            LoadData.load(inputFileName,"txt");
         }
     }
 }

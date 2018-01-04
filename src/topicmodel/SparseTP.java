@@ -590,7 +590,7 @@ public class SparseTP {
     public static void portal(String inputFilename, String pklName, int topicNumber,
              int iterationNumber, int numTopPhrases) {
         TimeClock clock = new TimeClock();
-        InstanceList training = InstanceList.load(new File(inputFilename));
+        InstanceList training = LoadData.load(inputFilename,"txt");
         TopicPrintUtil.init(pklName);
         System.out.println(clock.tick("loading data"));
 
@@ -642,12 +642,11 @@ public class SparseTP {
             System.out.println("e.g., input/20newsgroups.txt 20 1000 20");
         }else{
             String inputFileName=args[0];// input/20newsgroups.txt
-            String serializedFile=inputFileName+".serialized";
             String inputPkl=inputFileName+".pkl";
             int topicNumber=Integer.parseInt(args[1]);
             int iterationNumber=Integer.parseInt(args[2]);
             int numTopPhrases=Integer.parseInt(args[3]);
-            portal(serializedFile,inputPkl,topicNumber,iterationNumber,numTopPhrases);
+            portal(inputFileName,inputPkl,topicNumber,iterationNumber,numTopPhrases);
         }
     }
 

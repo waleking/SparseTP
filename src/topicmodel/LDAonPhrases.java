@@ -130,7 +130,7 @@ public class LDAonPhrases {
 
     public static void portal(String inputFilename,String pklName) {
         TimeClock clock = new TimeClock();
-        InstanceList training = InstanceList.load(new File(inputFilename));
+        InstanceList training = LoadData.load(inputFilename,"txt");
         TopicPrintUtil.init(pklName);
         System.out.println(clock.tick("loading data"));
 
