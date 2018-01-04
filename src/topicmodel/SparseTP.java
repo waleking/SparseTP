@@ -591,7 +591,7 @@ public class SparseTP {
              int iterationNumber, int numTopPhrases) {
         TimeClock clock = new TimeClock();
         InstanceList training = LoadData.load(inputFilename,"txt");
-        TopicPrintUtil.init(pklName);
+//        TopicPrintUtil.init(pklName);
         System.out.println(clock.tick("loading data"));
 
         int numTopics = topicNumber;

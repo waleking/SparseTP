@@ -106,7 +106,7 @@ public class TopicPrintUtil {
                                     ValueTopicOperator valueTopicOperator){
         ArrayList<TreeSet<IDSorter>> topicSortedWords=getSortedWords(topicNum, numTypes, itemsKV,valueTopicOperator);
         ArrayList<ArrayList<String>> topics=topicsPhraes(numEntityToShow,topicNum,topicSortedWords,alphabet);
-        double pmiscore=pmiComputer.pmi(topics);
+//        double pmiscore=pmiComputer.pmi(topics);
         return showTopics(numEntityToShow,topicNum,topicSortedWords,alphabet,showDigitNum);
     }
 
