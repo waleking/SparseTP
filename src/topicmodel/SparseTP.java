@@ -27,6 +27,7 @@ public class SparseTP {
     protected Alphabet alphabet;
 
     private double lambda=0.00001;
+    private double linkInformationThreshold=0.1;
 
     /**
      * A. word part
@@ -69,6 +70,10 @@ public class SparseTP {
     double[] topic_word_coef_phrasepart;
     ValueTopicOperator valueTopicOperator=null;
 
+    //link information, some phrase like "light years" which NPMI=-0.21 does not have the strong coherence between
+    //topics of phrases and topics of compositional words
+    boolean[] array_linkInfomation;
+
     private Randoms random;
     protected SparseStatisticsOfWords sparseStatisticsOfWords;//nKV, nK_
     protected SparseStatisticsOfPhrases sparseStatisticsOfPhrases;//nKV, nK_ of phrases
@@ -91,6 +96,7 @@ public class SparseTP {
     }
 
     public void addInstances(InstanceList training) {
+        this.array_linkInfomation=LinkInformation.loadLinkInformation(training.getPhraseAlphabet(),linkInformationThreshold);
         this.data = new ArrayList<TopicAssignment>();
 
         this.numWordTypes = training.getAlphabet().size();
@@ -311,17 +317,21 @@ public class SparseTP {
         //(6.addition1), update MRF part
         int index_mrf=0;
         mrf_sum_phrasepart=0;
-        while(index_mrf<localWordTypeTopicCounts.length && localWordTypeTopicCounts[index_mrf]>0){
-            int tmpValueTopic=localWordTypeTopicCounts[index_mrf];
-            int tmpvalue=this.valueTopicOperator.getValue(tmpValueTopic);
-            int tmpTopic=this.valueTopicOperator.getTopic(tmpValueTopic);
+        if(array_linkInfomation[type]==true){//set Markov Random Field only when link information is true
+            while(index_mrf<localWordTypeTopicCounts.length && localWordTypeTopicCounts[index_mrf]>0){
+                int tmpValueTopic=localWordTypeTopicCounts[index_mrf];
+                int tmpvalue=this.valueTopicOperator.getValue(tmpValueTopic);
+                int tmpTopic=this.valueTopicOperator.getTopic(tmpValueTopic);
 
-            mrf_exponent_phrasepart=exp(lambda*(float)tmpvalue/(float)(phrase.length-1));
-            int nkv=this.valueTopicOperator.getValueInArray(currentTypeTopicCounts,tmpTopic);
-            mrf_bucket_phrasepart[index_mrf]=(smoothing_only_bucket_phrasepart[tmpTopic]+document_topic_bucket_phrasepart[tmpTopic]
-                    +topic_word_coef_phrasepart[tmpTopic]*nkv)*(mrf_exponent_phrasepart-1);
-            mrf_sum_phrasepart+=mrf_bucket_phrasepart[index_mrf];
-            index_mrf++;
+                mrf_exponent_phrasepart=exp(lambda*(float)tmpvalue/(float)(phrase.length-1));
+                int nkv=this.valueTopicOperator.getValueInArray(currentTypeTopicCounts,tmpTopic);
+                mrf_bucket_phrasepart[index_mrf]=(smoothing_only_bucket_phrasepart[tmpTopic]+document_topic_bucket_phrasepart[tmpTopic]
+                        +topic_word_coef_phrasepart[tmpTopic]*nkv)*(mrf_exponent_phrasepart-1);
+                mrf_sum_phrasepart+=mrf_bucket_phrasepart[index_mrf];
+                index_mrf++;
+            }
+        }else{//set Markov Random Field only when link information is true
+            mrf_sum_phrasepart=0;
         }
 
         double total_mass=smoothing_only_sum_phrasepart+document_topic_sum_phrasepart
@@ -489,11 +499,18 @@ public class SparseTP {
             //(6.addition1), update MRF part
             double total_mass=0;
             if(ifContainPhrase==true){
-                mrf_exponent=exp(lambda/(float)(phraseLength));
-                int nkv=this.valueTopicOperator.getValueInArray(currentTypeTopicCounts,oldPhraseTopic);
-                mrf_sum=(smoothing_only_bucket[oldPhraseTopic]+document_topic_bucket[oldPhraseTopic]
-                        +topic_word_coef[oldPhraseTopic]*nkv)*(mrf_exponent-1);
-                total_mass=smoothing_only_sum+document_topic_sum+topic_word_sum+mrf_sum;
+                int phraseType=phrase[phraseLength];
+                if(array_linkInfomation[phraseType]==true){//set Markov Random Field only when link information is true
+                    mrf_exponent=exp(lambda/(float)(phraseLength));
+                    int nkv=this.valueTopicOperator.getValueInArray(currentTypeTopicCounts,oldPhraseTopic);
+                    mrf_sum=(smoothing_only_bucket[oldPhraseTopic]+document_topic_bucket[oldPhraseTopic]
+                            +topic_word_coef[oldPhraseTopic]*nkv)*(mrf_exponent-1);
+                    total_mass=smoothing_only_sum+document_topic_sum+topic_word_sum+mrf_sum;
+                }else{//set Markov Random Field only when link information is true
+                    mrf_exponent=0;
+                    mrf_sum=0;
+                    total_mass=smoothing_only_sum+document_topic_sum+topic_word_sum;//no mrf_sum
+                }
             }else{
                 mrf_exponent=0;
                 mrf_sum=0;
