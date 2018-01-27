@@ -26,6 +26,15 @@ public class SerializeData {
                 setStopPhrases.add(line.trim());
             }
         }
+        reader.close();
+        //process on input/stopPhrases.txt, which are filtered by the threshold=5%
+        reader=new MyFile("input/stopPhrases.txt","r");
+        lines=reader.readAll();
+        for(String line: lines){
+            if(!line.equals("")){
+                setStopPhrases.add(line.trim());
+            }
+        }
         return setStopPhrases;
     }
 
