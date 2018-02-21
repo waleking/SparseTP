@@ -13,7 +13,7 @@ if [ ! -e input/argentina.txt ]; then
     gzip -d input/argentina.txt.gz
 fi
 
-TopicNumber=50
+TopicNumber=100
 IterationNumber=1000
 NumberOfTopPhrasesToShow=10
 

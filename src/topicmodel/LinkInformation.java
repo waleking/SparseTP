@@ -23,7 +23,7 @@ public class LinkInformation {
             double df=Double.valueOf(splitted[2]);
             int phraseIdx=alphabet.lookupIndex(phrase);
             if(phraseIdx>0){
-                if(score>threshold && df>10){
+                if(score>threshold){
                     array_linkInfomation[phraseIdx]=true;
                 }
             }

@@ -15,6 +15,6 @@ fi
 
 TopicNumber=100
 IterationNumber=1000
-NumberOfTopPhrasesToShow=10
+NumberOfTopPhrasesToShow=20
 
 bash run.sh input/20newsgroups.txt ${TopicNumber} ${IterationNumber} ${NumberOfTopPhrasesToShow}

@@ -27,7 +27,7 @@ public class SparseTP {
     protected Alphabet alphabet;
 
     private double lambda=0.000001;
-    private double linkInformationThreshold=0.4;
+    private double linkInformationThreshold=0.1;
 
     /**
      * A. word part

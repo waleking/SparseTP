@@ -71,7 +71,8 @@ def extractLinkInformation(filename,outputfile):
     sortedList=sorted(dPhraseScore.items(),key=itemgetter(1),reverse=True)
     with open(outputfile,"w") as fWriter:
         for phrase,score in sortedList:
-            fWriter.write("%s\t%s\t%s\n" % (phrase,score,len(dPhrase[phrase])))
+            if(len(dPhrase[phrase])>5):
+                fWriter.write("%s\t%s\t%s\n" % (phrase,score,len(dPhrase[phrase])))
 
 
 if __name__=="__main__":
