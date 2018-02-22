@@ -664,8 +664,33 @@ public class SparseTP {
         resultWriter=new MyFile(resultFilenameForWords,"w");
         resultWriter.print(sortedWordTopics);
         resultWriter.close();
+
+        String topicAssignmentFilename="result/"+inputFilename.split("\\.")[0].split("/")[1]
+                +"_K"+topicNumber+"_iteration"+iterationNumber+".assignments";
+        savePhraseTopicAssigments(sparseTP_,topicAssignmentFilename);
     }
 
+    public static void savePhraseTopicAssigments(SparseTP sparseTP, String filename){
+        MyFile resultWriter=new MyFile(filename,"w");
+        ArrayList<TopicAssignment> data = sparseTP.data;
+        for (int doc = 0; doc < data.size(); doc++) {
+            TopicAssignment t = data.get(doc);
+            int[][] phrases = t.instance.getPhrases();
+            int[][] topicSequence = t.topicSequence;
+
+            //update ndk
+            for (int i = 0; i < phrases.length; i++) {
+                int[] phrase = phrases[i];
+                if(phrase.length==1){
+                }else{//phrase
+                    int k = topicSequence[i][phrase.length-1];
+                    resultWriter.print(Integer.toString(k)+"\t");
+                }
+            }
+            resultWriter.println("");
+        }
+        resultWriter.close();
+    }
 
     public static void main(String[] args) {
         if(args.length<4){

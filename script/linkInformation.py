@@ -34,9 +34,12 @@ def initData(filename):
     return dWord,dPhrase,N
 
 def computeNPMI(df1,df2,dfPhrase,N):
-    p1=(float(df1)+0.01)/float(N)
-    p2=(float(df2)+0.01)/float(N)
-    p12=(float(dfPhrase)+0.01)/float(N)
+    #p1=(float(df1)+0.01)/float(N)
+    p1=(float(df1))/float(N)
+    #p2=(float(df2)+0.01)/float(N)
+    p2=(float(df2))/float(N)
+    #p12=(float(dfPhrase)+0.01)/float(N)
+    p12=(float(dfPhrase))/float(N)
     NPMI=math.log(p12/(p1*p2))/(-math.log(p12))
     return NPMI
 
