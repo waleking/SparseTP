@@ -34,21 +34,4 @@ public class InstanceList extends ArrayList<Instance> implements Serializable {
     public boolean add (Instance instance){
         return super.add(instance);
     }
-
-    /** Constructs a new <code>InstanceList</code>, deserialized from <code>file</code>. */
-    public static InstanceList load (File file)
-    {
-        try {
-            ObjectInputStream ois;
-
-            ois = new ObjectInputStream (new BufferedInputStream(new FileInputStream(file)));
-
-            InstanceList ilist = (InstanceList) ois.readObject();
-            ois.close();
-            return ilist;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException ("Couldn't read InstanceList from file "+file);
-        }
-    }
 }

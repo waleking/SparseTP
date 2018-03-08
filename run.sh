@@ -11,11 +11,11 @@ echo ${green}===build the link information between phrases and words===${reset}
 python script/linkInformation.py ${inputfile} input/phrase_score.txt 
 
 cd script
-echo ${green}===serialize the input file, to speed up the io of topic modeling===${reset}
-bash runSerializeData.sh ${inputfile}
+#echo ${green}===serialize the input file, to speed up the io of topic modeling===${reset}
+#bash runSerializeData.sh ${inputfile}
 
-echo ${green}===build the invert index for phrases===${reset}
-python buildInvertIndex.py ${inputfile}
+#echo ${green}===build the invert index for phrases===${reset}
+#python buildInvertIndex.py ${inputfile}
 
 echo ${green}===topic modeling on phrases===${reset}
 bash runSparseTP.sh ${inputfile} ${topicNumber} ${iterationNumber} ${numTopPhrases}
