@@ -1,6 +1,7 @@
 import math
 from operator import itemgetter
 import sys
+import itertools
 
 def initData(filename):
     dWord=dict()
@@ -55,14 +56,16 @@ def computeNPMIforPhrase(phrase,dWord,dPhrase,N,debug=False):
     result=float("inf")
     dfPhrase=len(dPhrase[phrase])
     numWordInPhrase=len(splitted)
-    for i in range(numWordInPhrase-1):
-        two_words=" ".join(splitted[i:i+2])
+    #for i in range(numWordInPhrase-1):
+    for subset in itertools.combinations(range(numWordInPhrase),2):
+	i,j=subset
+        two_words=" ".join([splitted[i],splitted[j]])
         score=computeNPMIforPhrase_2words(two_words,dfPhrase,dWord,dPhrase,N)
         if(result>score):
             result=score
     if(debug):
         print("%s's NPMI\t%s" %(phrase,str(score)))
-    return score
+    return result 
 
 
 def extractLinkInformation(filename,outputfile):
