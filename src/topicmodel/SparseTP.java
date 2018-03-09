@@ -26,7 +26,7 @@ public class SparseTP {
     private int numPhraseTypes;//size of phrase vocabulary
     protected Alphabet alphabet;
 
-    private double lambda=0.00001;
+    private double lambda=0.0000001;
 
     /**
      * A. word part
@@ -595,7 +595,7 @@ public class SparseTP {
         System.out.println(clock.tick("loading data"));
 
         int numTopics = topicNumber;
-        double alpha = 0.2;
+        double alpha = 0.02;
         double beta = 0.01;
         double betaPhrase=0.05;
 
