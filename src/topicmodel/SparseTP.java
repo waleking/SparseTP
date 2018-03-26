@@ -668,6 +668,44 @@ public class SparseTP {
         String topicAssignmentFilename="result/"+inputFilename.split("\\.")[0].split("/")[1]
                 +"_K"+topicNumber+"_iteration"+iterationNumber+".assignments";
         savePhraseTopicAssigments(sparseTP_,topicAssignmentFilename);
+
+        String topicDistributionFilename="result/"+inputFilename.split("\\.")[0].split("/")[1]
+                +"_K"+topicNumber+"_iteration"+iterationNumber+".distribution";
+        saveTopicDistribution(sparseTP_,topicDistributionFilename);
+
+    }
+
+    public static void saveTopicDistribution(SparseTP sparseTP, String filename){
+        MyFile resultWriter=new MyFile(filename,"w");
+        ArrayList<TopicAssignment> data = sparseTP.data;
+        int[] ndk=new int[sparseTP.numTopics];
+
+        for (int doc = 0; doc < data.size(); doc++) {
+            TopicAssignment t = data.get(doc);
+            int[][] phrases = t.instance.getPhrases();
+            int[][] topicSequence = t.topicSequence;
+
+            Arrays.fill(ndk,0);
+            int n=0;
+
+            for (int i = 0; i < phrases.length; i++) {
+                int[] phrase = phrases[i];
+                if(phrase.length==1){
+                    int k = topicSequence[i][phrase.length-1];
+                    ndk[k]++;
+                    n++;
+                }else{//phrase
+                    int k = topicSequence[i][phrase.length-1];
+                    ndk[k]++;
+                    n++;
+                }
+            }
+            for(int k=0;k<sparseTP.numTopics;k++){
+                resultWriter.print(String.format("%.3f",(double)ndk[k]/(double)n)+" ");
+            }
+            resultWriter.println("");
+        }
+        resultWriter.close();
     }
 
     public static void savePhraseTopicAssigments(SparseTP sparseTP, String filename){
@@ -678,7 +716,6 @@ public class SparseTP {
             int[][] phrases = t.instance.getPhrases();
             int[][] topicSequence = t.topicSequence;
 
-            //update ndk
             for (int i = 0; i < phrases.length; i++) {
                 int[] phrase = phrases[i];
                 if(phrase.length==1){
