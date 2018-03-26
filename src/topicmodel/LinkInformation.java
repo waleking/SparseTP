@@ -31,14 +31,4 @@ public class LinkInformation {
         reader.close();
         return array_linkInfomation;
     }
-
-    public static void main(String[] args){
-        InstanceList training = InstanceList.load(new File("input/20newsgroups.txt.serialized"));
-        Alphabet alphabet=training.getPhraseAlphabet();
-        double threshold=0.1;
-        boolean[] array_linkInfomation=loadLinkInformation(alphabet,threshold);
-        for(int i=0;i<array_linkInfomation.length;i++){
-            System.out.println(array_linkInfomation[i]);
-        }
-    }
 }
