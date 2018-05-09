@@ -18,3 +18,4 @@ IterationNumber=1000
 NumberOfTopPhrasesToShow=10
 
 bash run.sh input/argentina.txt ${TopicNumber} ${IterationNumber} ${NumberOfTopPhrasesToShow} 
+python correlation_graph.py argentina ${TopicNumber}

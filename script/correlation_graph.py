@@ -4,6 +4,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import networkx as nx
 import matplotlib.pyplot as plt
 import sys
+import subprocess
 
 filename=sys.argv[1]
 topicNumber=sys.argv[2]
@@ -19,7 +20,7 @@ def fTurnToArray(line,K):
 
 i=0
 A=[]
-K=100
+K=int(topicNumber)
 with open("../result/"+filename+"_K"+topicNumber+"_iteration1000.assignments","r") as f:
     for line in f:
         line=line.strip()
@@ -57,7 +58,61 @@ def draw_correlation_graph(lower_weight):
 
     fig.savefig("../result/"+filename+"_correlation_graph_"+str(lower_weight)+".pdf",
                 bbox_inches='tight')
+    return g
 
-draw_correlation_graph(0.1)
-draw_correlation_graph(0.2)
-draw_correlation_graph(0.3)
+
+def loadTopics():
+    d=dict()
+    topicid=""
+    content=[]
+    with open("../result/"+filename+"_K"+str(K)+"_iteration1000.txt") as f:
+        for line in f:
+            line=line.strip()
+            tmptopicid,_,tmpcontent=line.split("\t")
+            topicid=int(tmptopicid.split("topic")[1].split(":")[0])
+            content=[]
+            for phrase in tmpcontent.split(",")[0:-1]:
+                content.append(phrase)
+            d[topicid]=content
+
+    print(d)
+    print("\n\n")
+    return d
+
+
+def getTopicDescription(dTopics,k,numTopWords):
+    words=dTopics[k]
+    description="topic"+str(k)+"\\n"
+    for i in range(0,numTopWords):
+        description=description+words[i]+"\\n"
+    return description.strip()
+
+
+def runcommand(command):
+    p = subprocess.Popen(command.split(" "), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = p.communicate()
+    print(out)
+
+def outputGraphvizFile(dTopics,lower_weight):
+    g=draw_correlation_graph(lower_weight)
+    gvFilename="../result/"+filename+"_graphviz_"+str(lower_weight)+".gv"
+    pdfFilename="../result/"+filename+"_graphviz_"+str(lower_weight)+".pdf"
+    with open(gvFilename,"w") as gvWriter:
+        gvWriter.write("graph {\n")
+        gvWriter.write("ratio=auto;\n")
+        for k in range(0,K):
+            description=getTopicDescription(dTopics,k,numTopWords=5)
+            gvWriter.write("\t%s [label=\"%s\"];\n" % (k,description))
+
+        for edge in g.edges():
+            source,target=edge
+            gvWriter.write("\t%s -- %s;\n" % (source,target))
+        gvWriter.write("}\n")
+
+    runcommand("dot -Tpdf "+gvFilename+" -o "+pdfFilename)
+
+
+dTopics=loadTopics()
+outputGraphvizFile(dTopics,0.1)
+outputGraphvizFile(dTopics,0.2)
+outputGraphvizFile(dTopics,0.3)
