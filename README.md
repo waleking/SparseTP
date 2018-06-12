@@ -1,7 +1,7 @@
 # SparseTP: Efficient Topic Modeling on Phrases via Sparsity
 
 ## Publication
-This work has been published in ICTAI 2017. If you are using this tool, please cite our paper, thank you!  
+This work has been published in [ICTAI 2017](https://ieeexplore.ieee.org/document/8371953/). If you are using this tool, please cite our paper, thank you!  
 
 *  Efficient Topic Modeling on Phrases via Sparsity, Weijing Huang, Wei Chen, Tengjiao Wang and Shibo Tao, Proceedings of the 29th IEEE International Conference on Tools with Artifical Intelligence (ICTAI'17), Boston, USA, Nov 2017. ([slides](https://github.com/waleking/SparseTP/blob/master/ICTAI_presentation.pdf))
 
